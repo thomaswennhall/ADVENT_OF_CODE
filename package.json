@@ -1,7 +1,7 @@
 {
-  "name": "1",
+  "name": "advent_of_code_js",
   "version": "1.0.0",
-  "description": "Advent of code",
+  "description": "Solutions for the Advent of code puzzles using js",
   "main": "index.js",
   "scripts": {
     "start": "node index",

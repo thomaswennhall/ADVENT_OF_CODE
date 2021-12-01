@@ -1,15 +1,27 @@
 import fs from 'fs'
 
-const TXT = fs.readFileSync('input.txt', { encoding: 'utf8' })
+const TXT = fs.readFileSync('Day 1/input.txt', { encoding: 'utf8' })
 
 const INPUT = TXT.split('\n').map(str => +str)
 
-let numOfIncreases = 0
+function getNumOfIncreases(array) {
+  let numOfIncreases = 0
+  for (const [i, num] of array.entries()) {
+    if (num < array[i + 1]) {
+      numOfIncreases++
+    }
+  }
+  return numOfIncreases
+}
 
-for (const [i, num] of INPUT.entries()) {
-  if (num < INPUT[i + 1]) {
-    numOfIncreases++
+console.log('Part 1: ', getNumOfIncreases(INPUT))
+
+let sums = []
+for (let i = 0; i < INPUT.length - 1; i++) {
+  if (INPUT[i] && INPUT[i + 1] && INPUT[i + 2]) {
+    const sum = INPUT[i] + INPUT[i + 1] + INPUT[i + 2]
+    sums.push(sum)
   }
 }
 
-console.log('result: ', numOfIncreases)
+console.log('Part 2: ', getNumOfIncreases(sums))
