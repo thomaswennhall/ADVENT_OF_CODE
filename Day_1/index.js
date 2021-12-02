@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-const TXT = fs.readFileSync('Day 1/input.txt', { encoding: 'utf8' })
+const TXT = fs.readFileSync('Day_1/input.txt', { encoding: 'utf8' })
 
 const INPUT = TXT.split('\n').map(str => +str)
 
