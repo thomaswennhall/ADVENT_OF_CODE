@@ -15,7 +15,7 @@ function oneBinaryDigit(columnArray) {
       num0s++
     }
   }
-  return num1s > num0s ? '1' : '0'
+  return num1s >= num0s ? '1' : '0'
 }
 
 function oneBinaryNumber(arrayOfColumns) {
@@ -31,7 +31,7 @@ function convertToColumns(array) {
   return array[0].map((col, i) => array.map(row => row[i]))
 }
 
-function getAnswer(array) {
+function getPC(array) {
   const columns = convertToColumns(array)
   const gammaBinary = oneBinaryNumber(columns)
   const epsilonBinary = gammaBinary
@@ -41,6 +41,44 @@ function getAnswer(array) {
   return parseInt(gammaBinary, 2) * parseInt(epsilonBinary, 2)
 }
 
-const answer = getAnswer(INPUT)
+const powerConsumption = getPC(INPUT)
 
-console.log('Part 1: ', answer)
+console.log('Part 1: ', powerConsumption)
+
+function getOG(rows) {
+  let columns = convertToColumns(rows)
+
+  for (let i = 0; i < columns.length; i++) {
+    let mostCommon = oneBinaryDigit(columns[i])
+
+    rows = rows.filter(row => row[i] === mostCommon)
+    columns = convertToColumns(rows)
+    if (rows.length === 1) break
+  }
+
+  const binary = rows[0].join('')
+  const oxygen_generator = parseInt(binary, 2)
+  return oxygen_generator
+}
+
+function getC02SR(rows) {
+  let columns = convertToColumns(rows)
+
+  for (let i = 0; i < columns.length; i++) {
+    let leastCommon = oneBinaryDigit(columns[i]) === '1' ? '0' : '1'
+
+    rows = rows.filter(row => row[i] === leastCommon)
+    columns = convertToColumns(rows)
+    if (rows.length === 1) break
+  }
+
+  const binary = rows[0].join('')
+  const CO2_scrubber_rating = parseInt(binary, 2)
+  return CO2_scrubber_rating
+}
+
+const OG = getOG(INPUT)
+const C02 = getC02SR(INPUT)
+const lifeSupportRating = OG * C02
+
+console.log('Part 2: ', lifeSupportRating)
