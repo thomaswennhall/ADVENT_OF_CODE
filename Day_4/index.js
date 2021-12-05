@@ -1,7 +1,3 @@
-// FIND THE WINNING BOARD
-// mark drawn numbers on all boards until there is a winner
-// the final score is the sum of all unmarked numbers on
-// the winning board times the number that was drawn last
 import fs from 'fs'
 
 const TXT = fs.readFileSync('Day_4/input.txt', { encoding: 'utf8' })
@@ -76,3 +72,60 @@ console.log('Part 1: ', finalScore)
 function convertToColumns(array) {
   return array[0].map((col, i) => array.map(row => row[i]))
 }
+
+for (const number of NUMS_TO_BE_DRAWN) {
+  boards.forEach(board => {
+    board.rows = board.rows.map(row => row.map(num => (num === number ? 'x' : num)))
+    board.columns = board.columns.map(column => column.map(num => (num === number ? 'x' : num)))
+  })
+
+  if (boards.length > 1) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      boards = boards.filter(
+        board =>
+          !(
+            board.rows[i].filter(num => num === 'x').length === BOARD_SIZE ||
+            board.columns[i].filter(num => num === 'x').length === BOARD_SIZE
+          )
+      )
+    }
+  } else {
+    break
+  }
+
+  lastNumDrawn = number
+}
+
+const lastBoard = boards[0]
+
+let loser
+
+for (const number of NUMS_TO_BE_DRAWN) {
+  lastBoard.rows = lastBoard.rows.map(row => row.map(num => (num === number ? 'x' : num)))
+  lastBoard.columns = lastBoard.columns.map(column =>
+    column.map(num => (num === number ? 'x' : num))
+  )
+
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    loser =
+      lastBoard.rows[i].filter(num => num === 'x').length === BOARD_SIZE ||
+      lastBoard.columns[i].filter(num => num === 'x').length === BOARD_SIZE
+    if (loser) {
+      break
+    }
+  }
+
+  if (loser) {
+    lastNumDrawn = number
+    break
+  }
+}
+
+const unmarkedNumsL = lastBoard.rows.map(row => row.filter(num => num !== 'x')).flat()
+const sumOfUnmarkedNumsL = unmarkedNumsL.reduce((prev, curr) => prev + curr)
+
+const finalScoreL = sumOfUnmarkedNumsL * lastNumDrawn
+
+console.log('Part 2: ', finalScoreL)
+
+// That was horrible
