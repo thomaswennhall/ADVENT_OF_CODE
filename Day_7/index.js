@@ -1,9 +1,9 @@
 import fs from 'fs'
 
-const TXT = fs.readFileSync('Day_7/test.txt', { encoding: 'utf8' })
+const TXT = fs.readFileSync('Day_7/input.txt', { encoding: 'utf8' })
 const initialState = TXT.split(',').map(s => +s)
 
-function findMedian(arr = []) {
+function findMedian(arr) {
   const sorted = arr.slice().sort((a, b) => {
     return a - b
   })
@@ -26,3 +26,27 @@ const fuelConsumption1 = initialState.reduce((prev, curr, i) => {
 })
 
 console.log('Part 1: ', fuelConsumption1)
+
+function findMeanIsh(arr) {
+  return Math.floor(arr.reduce((a, b) => a + b) / arr.length)
+}
+
+const bestPosition2 = findMeanIsh(initialState)
+const fuelConsumption2 = initialState.reduce((prev, curr, index) => {
+  let prevFuelConsumption = 0
+  if (index == 1) {
+    const distancePrev = Math.abs(prev - bestPosition2)
+    for (let i = 0; i < distancePrev; i++) {
+      prevFuelConsumption += distancePrev - i
+    }
+  }
+  const distance = Math.abs(curr - bestPosition2)
+  let currFuelConsumption = 0
+  for (let i = 0; i < distance; i++) {
+    currFuelConsumption += distance - i
+  }
+
+  return index === 1 ? prevFuelConsumption + currFuelConsumption : prev + currFuelConsumption
+})
+
+console.log('Part 2: ', fuelConsumption2)
